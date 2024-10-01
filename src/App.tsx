@@ -1,21 +1,15 @@
 import { MyFormType, useMyForm } from "./use-my-form";
 import { useState } from "react";
 
-type DataTypeA = {
+type DataType = {
   name: string;
-  participantType: "timeTraveler";
-  year: number;
-};
-
-type DataTypeB = {
-  name: string;
-  participantType: "alien";
-  planetName: string;
-  year: number;
+  participantType: "timeTraveler" | "alien";
+  year?: number;
+  planetName?: string;
 };
 
 function App() {
-  const [data, setData] = useState<DataTypeA | DataTypeB>();
+  const [data, setData] = useState<DataType | undefined>();
 
   const {
     register,
@@ -26,21 +20,22 @@ function App() {
 
   const participantType = watch("participantType");
 
-  const onSubmit = (data: MyFormType) => {
-    if (data.participantType === "alien") {
+  const onSubmit = (formData: MyFormType) => {
+    const commonData = {
+      name: formData.name,
+      participantType: formData.participantType,
+    };
+
+    if (formData.participantType === "alien") {
       console.log(data);
       setData({
-        name: data.name,
-        participantType: data.participantType,
-        planetName: data.planetName,
-        year: data.year,
+        ...commonData,
+        planetName: formData.planetName,
       });
     } else {
       setData({
-        name: data.name,
-        participantType: data.participantType,
-        planetName: "-",
-        year: data.year,
+        ...commonData,
+        year: formData.year,
       });
     }
   };
@@ -87,10 +82,16 @@ function App() {
         )}
         <button type="submit">登録</button>
       </form>
-      <div>{data?.name}</div>
-      <div>{data?.participantType}</div>
-      <div>{data?.planetName}</div>
-      <div>{data?.year}</div>
+      {data && (
+        <div>
+          <div className="">名前: {data.name}</div>
+          <div className="">参加者タイプ: {data.participantType}</div>
+          <div className="">
+            出身星: {data.planetName ? data.planetName : "-"}
+          </div>
+          <div>年: {data.year ? data.year : "-"}</div>
+        </div>
+      )}
     </>
   );
 }
