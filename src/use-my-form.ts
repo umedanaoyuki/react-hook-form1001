@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-const myFormSchema = yup.object().shape({
+export const myFormSchema = yup.object().shape({
   name: yup.string().required("お名前を入力してください。"),
   participantType: yup.string().oneOf(["timeTraveler", "alien"]).required(),
   year: yup.number().when("participantType", {
@@ -24,5 +24,11 @@ export type MyFormType = yup.InferType<typeof myFormSchema>;
 export const useMyForm = () => {
   return useForm<MyFormType>({
     resolver: yupResolver(myFormSchema),
+    defaultValues: {
+      name: "",
+      participantType: "alien",
+      year: undefined,
+      planetName: undefined,
+    },
   });
 };

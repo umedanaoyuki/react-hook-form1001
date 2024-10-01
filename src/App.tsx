@@ -27,7 +27,6 @@ function App() {
     };
 
     if (formData.participantType === "alien") {
-      console.log(data);
       setData({
         ...commonData,
         planetName: formData.planetName,
@@ -43,40 +42,46 @@ function App() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="">お名前は？</label>
-        <input type="" {...register("name")} />
+        <label htmlFor="name">お名前は？</label>
+        <input id="name" {...register("name")} />
         {errors.name && <span>{errors.name.message}</span>}
 
-        <label htmlFor="">参加者タイプ</label>
-        <input
-          type="radio"
-          {...register("participantType")}
-          id="participantType_timeTraveler"
-          value="timeTraveler"
-        />
-        <label htmlFor="participantType_timeTraveler">
-          時間旅行者 - Time Traveler
-        </label>
-        <input
-          type="radio"
-          {...register("participantType")}
-          id="participantType_alien"
-          value="alien"
-        />
-        <label htmlFor="participantType_alien">エイリアン — Alien</label>
+        <fieldset>
+          <legend>参加者タイプ</legend>
+          <input
+            type="radio"
+            {...register("participantType")}
+            id="participantType_timeTraveler"
+            value="timeTraveler"
+          />
+          <label htmlFor="participantType_timeTraveler">
+            時間旅行者 - Time Traveler
+          </label>
+          <input
+            type="radio"
+            {...register("participantType")}
+            id="participantType_alien"
+            value="alien"
+          />
+          <label htmlFor="participantType_alien">エイリアン — Alien</label>
+        </fieldset>
 
         {participantType === "timeTraveler" && (
           <>
-            <label>西暦何年から来ましたか？</label>
-            <input {...register("year")} />
+            <label htmlFor="year">西暦何年から来ましたか？</label>
+            <input
+              id="year"
+              type="number"
+              {...register("year", { valueAsNumber: true })}
+            />
             {errors.year && <span>{errors.year.message}</span>}
           </>
         )}
 
         {participantType === "alien" && (
           <>
-            <label htmlFor="">出身星の名前は?</label>
-            <input {...register("planetName")} />
+            <label htmlFor="planetName">出身星の名前は?</label>
+            <input id="planetName" {...register("planetName")} />
             {errors.planetName && <span>{errors.planetName.message}</span>}
           </>
         )}
@@ -84,12 +89,10 @@ function App() {
       </form>
       {data && (
         <div>
-          <div className="">名前: {data.name}</div>
-          <div className="">参加者タイプ: {data.participantType}</div>
-          <div className="">
-            出身星: {data.planetName ? data.planetName : "-"}
-          </div>
-          <div>年: {data.year ? data.year : "-"}</div>
+          <div>名前: {data.name}</div>
+          <div>参加者タイプ: {data.participantType}</div>
+          <div>出身星: {data.planetName ?? "-"}</div>
+          <div>年: {data.year ?? "-"}</div>
         </div>
       )}
     </>
